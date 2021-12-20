@@ -14,7 +14,7 @@ class Player(pg.sprite.Sprite):
         self.pos = vec(100, 100)
         self.rect.center = self.pos
         self.speed = 3
-        self.hp = 100
+        self.hp = 150
     
     def update(self):
         keys = pg.key.get_pressed()
@@ -54,6 +54,7 @@ class Enemy(pg.sprite.Sprite):
         self.pos = vec(1000, randint(0, 600)) # start posisjon
         self.rect.center = self.pos
         self.speed_x = 1
+        self.life = 50
     
     def update(self):
         self.pos.x += self.speed_x
