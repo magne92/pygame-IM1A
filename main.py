@@ -62,9 +62,6 @@ while playing:
 
     # rendrer/generer teksten som vi kan tegne til game screen
     # dette viser ikke teksten enda, men har bare laget den klar
-
-  
-
     text_player_hp = comic_sans30.render(str(player.hp), False, (RED))
     
     # tegn teksten til skjermen på en satt posisjon

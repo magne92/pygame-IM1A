@@ -2,8 +2,8 @@ import pygame as pg
 vec = pg.math.Vector2
 from random import randint
 
-enemy_image = pg.image.load("pygame\enemy.png")
-player_image = pg.image.load("pygame\player.png")
+enemy_image = pg.image.load("enemy.png")
+player_image = pg.image.load("player.png")
 
 class Player(pg.sprite.Sprite):
     def __init__(self):
