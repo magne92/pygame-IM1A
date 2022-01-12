@@ -14,7 +14,7 @@ class Player(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.pos = vec(100, 100)
         self.rect.center = self.pos
-        self.move_speed = 1
+        self.move_speed = 0
         self.speed_x = 0
         self.speed_y = 0
         self.hp = 150
@@ -24,23 +24,9 @@ class Player(pg.sprite.Sprite):
     
     def update(self):
         keys = pg.key.get_pressed()
-
-
-        self.hit_block = pg.sprite.spritecollide(self, self.game.blocks_grp, False)
-        if self.hit_block:
-            if self.rect.top <= self.hit_block[0].rect.bottom:
-                self.can_move_up = False
-                
-            if self.rect.bottom >= self.hit_block[0].rect.top:
-                self.can_move_down = False
-                self.pos.y -= 3
-            if self.rect.right >= self.hit_block[0].rect.left:
-                self.can_move_right = False
-            if self.rect.left >= self.hit_block[0].rect.right:
-                self.can_move_left = False
-        else:
-            self.can_move_up, self.can_move_down, self.can_move_right, self.can_move_left = True,True,True,True
-
+        self.speed_x = 0
+        self.speed_y = 0
+        '''
         if keys[pg.K_w] and self.can_move_up:           
             self.pos.y -= self.move_speed
         if keys[pg.K_s] and self.can_move_down:
@@ -49,9 +35,48 @@ class Player(pg.sprite.Sprite):
             self.pos.x -= self.move_speed
         if keys[pg.K_d] and self.can_move_right:
             self.pos.x += self.move_speed
+        '''
+        if keys[pg.K_w] and self.can_move_up:           
+            self.speed_y = -3
+        if keys[pg.K_s] and self.can_move_down:
+            self.speed_y = 3        
+        if keys[pg.K_a] and self.can_move_left:
+           self.speed_x = -3
+        if keys[pg.K_d] and self.can_move_right:
+            self.speed_x = 3
 
+        self.hit_block = pg.sprite.spritecollide(self, self.game.blocks_grp, False)
+        if self.hit_block:
+            lowest = self.hit_block[0]
+            for hit in self.hit_block:
+                if hit.rect.bottom > lowest.rect.bottom:
+                    lowest = hit
+            if self.rect.bottom > lowest.rect.top:
+                self.rect.bottom = lowest.rect.top
+                print("colliding bot")
+
+            
+            if self.rect.top <= self.hit_block[0].rect.bottom:
+                self.speed_y = 0 
+                print("colliding top")  
+
+            '''              
+            if self.rect.right >= self.hit_block[0].rect.left:
+               self.speed_x = 0  
+               print("colliding right")
+            if self.rect.left <= self.hit_block[0].rect.right:
+                self.speed_x = 0  
+                print("colliding left")
+            '''
+        self.pos.x += self.speed_x
+        self.pos.y += self.speed_y
         self.rect.center = self.pos
+            
+        #else:
+        #    self.can_move_left, self.can_move_right, self.can_move_down, self.can_move_up = True, True, True, True
 
+
+        #print(self.can_move_left, self.can_move_right, self.can_move_down, self.can_move_up)
         
 
 
