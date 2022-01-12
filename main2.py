@@ -26,9 +26,14 @@ class Game():
         self.all_sprites = pg.sprite.Group()
         self.enemies = pg.sprite.Group()
         self.projectiles = pg.sprite.Group()
+        self.blocks_grp = pg.sprite.Group()
 
-        self.my_player = Player()
+        self.my_player = Player(self) 
         self.all_sprites.add(self.my_player)
+
+        self.small_block = Block()  # lager en block av klassen Block
+        self.all_sprites.add(self.small_block)
+        self.blocks_grp.add(self.small_block)
 
         self.freak = Enemy()
         self.all_sprites.add(self.freak)
@@ -66,7 +71,7 @@ class Game():
             self.freak = Enemy()
             self.all_sprites.add(self.freak)
             self.enemies.add(self.freak)
- 
+
 
     def draw(self):
         # tegner ting til skjerm på valgt posisjon, og størrelse
