@@ -1,5 +1,5 @@
 import pygame as pg
-from sprites import *
+from sprites1 import *
 
 pg.init()
 #pg.font.init()
@@ -49,14 +49,19 @@ while playing:
     all_sprites.update()
 
     # check for collision
-    hits = pg.sprite.spritecollide(player, enemies, True) 
+    hits = pg.sprite.spritecollide(player, enemies, True)
+    if hits:
+        # knockback when collided
+        knock_pos = vec(hits[0].pos)
+        knock_vec = knock_pos - player.pos 
+        player.pos -= knock_vec.normalize() * 100
+        
     
     # spawn enemies max 10
     while len(enemies) < 10:
         freak = Enemy()
         all_sprites.add(freak)
         enemies.add(freak)
-
 
     all_sprites.draw(screen)
 

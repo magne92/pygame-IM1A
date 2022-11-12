@@ -1,5 +1,5 @@
 import pygame as pg
-from sprites import *
+from sprites2 import *
 
 WIDTH = 800
 HEIGHT = 600 
@@ -14,7 +14,7 @@ class Game():
     def __init__(self):
         pg.init()
 
-        self.crash_sound = pg.mixer.Sound("pling.wav") # laster inn lyd, klar til bruk
+        #self.crash_sound = pg.mixer.Sound("pling.wav") # laster inn lyd, klar til bruk
 
         # lager font/teksttype med størrelse 30
         self.comic_sans30 = pg.font.SysFont("Comic Sans MS", 30)
