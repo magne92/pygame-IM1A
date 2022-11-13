@@ -32,6 +32,7 @@ enemies.add(freak)
 player = Player()
 all_sprites.add(player)
 
+player_hp = 100
 
 
 playing = True
