@@ -2,10 +2,15 @@ import pygame as pg
 vec = pg.math.Vector2
 from random import randint
 
-enemy_image = pg.image.load("enemy.png")
-player_image = pg.image.load("player.png")
-small_attack_image = pg.image.load("fireball.png")
-big_attack_image = pg.image.load("big_fireball.png")
+pg.init()
+pg.mixer.init()
+
+enemy_image = pg.image.load("img/enemy.png")
+player_image = pg.image.load("img/player.png")
+small_attack_image = pg.image.load("img/fireball.png")
+big_attack_image = pg.image.load("img/big_fireball.png")
+
+small_attack_sound = pg.mixer.Sound("sounds/shoot_fire.wav")
 
 
 class Player(pg.sprite.Sprite):
@@ -24,6 +29,9 @@ class Player(pg.sprite.Sprite):
         self.small_attack_cost = 10
         self.big_attack_cost = 50
 
+        self.last_attack = 0
+        self.attack_interval = 500
+
         self.speed = 3
         self.hp = 150
 
@@ -36,7 +44,8 @@ class Player(pg.sprite.Sprite):
             self.pos.y += self.speed        
 
         mouse = pg.mouse.get_pressed()
-        if mouse[0]: # 0 er venstre klikk 1 middle 2 høyreklikk
+        
+        if mouse[0]: # 0 er venstre klikk, 1 middle, 2 høyreklikk
             self.attack()
         if mouse[2]:
             self.big_attack()
@@ -48,15 +57,21 @@ class Player(pg.sprite.Sprite):
             self.energy += 1
        
     def attack(self):
-        if self.energy > self.small_attack_cost:
+        now = pg.time.get_ticks()
+        if self.energy > self.small_attack_cost and now - self.last_attack > self.attack_interval:
             print("attacked")
             self.energy -= self.small_attack_cost
+            self.last_attack = pg.time.get_ticks()
             Ranged_attack(self.game, "small")
+            pg.mixer.Sound.play(small_attack_sound)
 
     def big_attack(self):
-        if self.energy > self.big_attack_cost:
+        now = pg.time.get_ticks()
+        if self.energy > self.big_attack_cost and now - self.last_attack > self.attack_interval:
             self.energy -= self.big_attack_cost
+            self.last_attack = pg.time.get_ticks()
             Ranged_attack(self.game, "big")
+            pg.mixer.Sound.play(small_attack_sound)
 
     def draw_bar(self, surf, pos, size, borderC, backC, healthC, progress):
         pg.draw.rect(surf, backC, (*pos, *size))

@@ -1,5 +1,5 @@
 import pygame as pg
-from sprites2 import *
+from space_sprites import *
 
 WIDTH = 800
 HEIGHT = 600 

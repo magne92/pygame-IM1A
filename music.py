@@ -6,7 +6,6 @@ class Game():
 
         pg.mixer.music.load('musikk.wav') # laster inn musikk, klar til bruk, .wav, .mp3 og .ogg filer støttes
 
-
         self.spawn_sound = pg.mixer.Sound("pling.wav") # laster inn en enkelt lydeffekt, 
 
     def new(self):

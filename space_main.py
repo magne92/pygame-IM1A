@@ -1,8 +1,8 @@
 import pygame as pg
-from sprites2 import *
+from space_sprites import *
 
 WIDTH = 1024
-HEIGHT = 600 
+HEIGHT = 600
 FPS = 60
 
 BLACK = (0,0,0)
@@ -13,20 +13,25 @@ RED = (255,0,0)
 class Game():
     def __init__(self):
         pg.init()
+        pg.mixer.init()
 
+        
+        pg.mixer.music.load("sounds/bgm_0.mp3")
+      
         #self.crash_sound = pg.mixer.Sound("pling.wav") # laster inn lyd, klar til bruk
 
         # lager font/teksttype med størrelse 30
         self.comic_sans30 = pg.font.SysFont("Comic Sans MS", 30)
 
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
-        self.bg = pg.image.load("background.png").convert_alpha()
+        self.bg = pg.image.load("img/background.png").convert_alpha()
         self.bg_width = self.bg.get_width()
         self.clock = pg.time.Clock()
 
         self.new()
-    0
+
     def new(self):
+        pg.mixer.music.play(-1)
         self.all_sprites = pg.sprite.Group()
         self.enemies = pg.sprite.Group()
         self.projectiles_grp = pg.sprite.Group()
@@ -94,6 +99,9 @@ class Game():
 
         # oppdaterer alle endringer på spill vinduet
         pg.display.update()
+
+    def level(self):
+        pass
 
 g = Game()
 
