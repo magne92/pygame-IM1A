@@ -99,12 +99,16 @@ class Ranged_attack(pg.sprite.Sprite):
             self.image = small_attack_image
         elif type == "big":
             self.image = big_attack_image
+            self.big = True
+
+        self.orig_image = self.image
+
         self.rect = self.image.get_rect()
         self.pos = vec(game.my_player.pos.x + 50 + self.image.get_width(),game.my_player.pos.y)
-       
         self.rect.center = self.pos
         self.speed = 10
-
+        self.angle = 0
+        
         self.attack_to = vec(pg.mouse.get_pos())
         self.attack_direction = self.attack_to - self.pos  # finner "forskjellen" mellom self.pos og posisjon til musepeker
         self.direction = self.attack_direction.normalize() * self.speed  
@@ -112,11 +116,23 @@ class Ranged_attack(pg.sprite.Sprite):
         print(self.game.projectiles_grp)
         print(self.rect)
 
+
     def update(self):
         self.pos += self.direction
         self.rect.center = self.pos
-
+        self.angle += 10
        
+
+        self.image, self.rect = self.rot_center(self.orig_image, self.angle, self.pos.x, self.pos.y)
+       
+
+    def rot_center(self, image, angle, x, y):   
+        rotated_image = pg.transform.rotate(image, angle)
+        new_rect = rotated_image.get_rect(center = image.get_rect(center = (x, y)).center)
+
+        return rotated_image, new_rect
+       
+
 
 
 

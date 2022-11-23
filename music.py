@@ -15,7 +15,7 @@ class Game():
     def update(self):
             self.all_sprites.update()
             # spawn enemies max 10
-            while len(self.enemies) < 10:
+            if len(self.enemies) < 10:
                 self.freak = Enemy()
                 self.all_sprites.add(self.freak)
                 self.enemies.add(self.freak)
