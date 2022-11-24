@@ -31,7 +31,7 @@ class Game():
         self.new()
 
     def new(self):
-        pg.mixer.music.play(-1)
+        #pg.mixer.music.play(-1)
         self.all_sprites = pg.sprite.Group()
         self.enemies = pg.sprite.Group()
         self.projectiles_grp = pg.sprite.Group()
@@ -49,7 +49,8 @@ class Game():
             self.events()
             self.update()
             self.draw()
-        self.new()
+        self.game_over()
+
 
     def events(self):
         for event in pg.event.get():
@@ -102,18 +103,42 @@ class Game():
 
         # rendrer/generer teksten som vi kan tegne til game screen
         # dette viser ikke teksten enda, men har bare laget den klar
-        self.text_player_hp = self.comic_sans30.render("HP: " + str(self.player.hp), False, (RED))
-        self.player_energy = self.comic_sans30.render("Energy: " + str(self.player.energy), False, (RED))
+        #self.text_player_hp = self.comic_sans30.render("HP: " + str(self.player.hp), False, (RED))
+        #self.player_energy = self.comic_sans30.render("Energy: " + str(self.player.energy), False, (RED))
         
         # tegn teksten til skjermen på en satt posisjon
-        self.screen.blit(self.text_player_hp, (10, 10))
-        self.screen.blit(self.player_energy, (10, 40))
+        #self.screen.blit(self.text_player_hp, (10, 10))
+        #self.screen.blit(self.player_energy, (10, 40))
 
         # oppdaterer alle endringer på spill vinduet
         pg.display.update()
 
+
+    def game_over(self):
+        self.game_over = True
+        while self.game_over:
+            self.clock.tick(self.FPS)
+            self.game_over_text = self.comic_sans30.render("Game over, click R to restart", False, (RED))
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    self.game_over = False
+                    pg.quit()
+
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_r:  # om vi clicker på R, avslutter vi game over loop, og går derett til self.new() som ligger etter game_over loop
+                        self.game_over = False  
+
+            self.screen.fill(BLACK)
+            self.blit(self.game_over_text,(30,30))  # tegner tekst på skjerm. 
+
+            pg.display.update()
+
+        self.new()  # starter ny runde
+
     def level(self):
         pass
+
+
 
 g = Game()
 

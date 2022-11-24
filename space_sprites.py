@@ -161,11 +161,11 @@ class Enemy(pg.sprite.Sprite):
                 self.knockbacked = False
                 self.speed_x = 4
         
-            print("knockbacked")
-            print(self.direction)
+            #print("knockbacked")
+            #print(self.direction)
             self.pos += self.direction
         
-        
+
         self.pos.x += -self.speed_x
 
         self.rect.center = self.pos
@@ -175,13 +175,12 @@ class Enemy(pg.sprite.Sprite):
             self.knockbacked = True
             self.player_hit_pos = player_pos
             self.knock_time = self.game.now
-            self.speed_x = 0
+            #self.speed_x = 0
             knock_pos = vec(hit_pos)
             knock_vec = knock_pos - self.player_hit_pos
             self.direction = knock_vec.normalize() * 3
 
         
-
 class Block(pg.sprite.Sprite):
     def __init__(self):
         pg.sprite.Sprite.__init__(self)

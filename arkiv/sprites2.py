@@ -1,6 +1,6 @@
 import pygame as pg
 vec = pg.math.Vector2
-from random import randint
+from random import randint, choice
 
 enemy_image = pg.image.load("enemy.png")
 player_image = pg.image.load("player.png")
@@ -90,6 +90,7 @@ class Enemy(pg.sprite.Sprite):
         self.rect.center = self.pos
         self.speed_x = 1
         self.life = 50
+
     
     def update(self):
         self.pos.x += self.speed_x
@@ -116,4 +117,35 @@ class Block(pg.sprite.Sprite):
     
     def update(self):
         self.rect.center = self.pos
+
+
+
+from random import randint, choice  # choice må være importert
+
+
+class Enemy(pg.sprite.Sprite):
+    def __init__(self):
+        pg.sprite.Sprite.__init__(self)
+        self.image = enemy_image
+        self.rect = self.image.get_rect()
+        self.pos = vec(100,400) # start posisjon
+        self.rect.center = self.pos
+        
+        self.direction_x = choice([5, -5])  # alternativt velge tilfeldig mellom å starte å gå mot høyre eller mot venstre
+        self.direction_x = 5 # starter med å gå mot høyre
+        # kun en av self.direction_x er nødvendig
+        
+        self.direction_y = 0 # opp/ned direction started med 0. Om denne også er random vil den gå på skrå.
+
+    def update(self):
+        self.pos.x += self.speed
+        self.rect.center = self.pos
+
+        if self.pos.x > 500:   # skal gi ny direction verdig når vi er for langt til høyre
+            self.pos.x = 500
+            self.direction = choice([5, -5]) # direction får ny verdig, enten 5 eller -5. Oppover eller nedover.
+            
+        # flere if self.pos må lages for x og ,y. opp ned høyre venstre.
+        
+
 
