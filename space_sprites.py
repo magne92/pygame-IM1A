@@ -51,7 +51,7 @@ class Player(pg.sprite.Sprite):
             self.big_attack()
 
         self.rect.center = self.pos
-        print(self.pos)
+       
 
         if self.energy < self.max_energy:
             self.energy += 1
@@ -104,7 +104,7 @@ class Ranged_attack(pg.sprite.Sprite):
         self.orig_image = self.image
 
         self.rect = self.image.get_rect()
-        self.pos = vec(game.my_player.pos.x + 50 + self.image.get_width(),game.my_player.pos.y)
+        self.pos = vec(game.player.pos.x + 50 + self.image.get_width(),game.player.pos.y)
         self.rect.center = self.pos
         self.speed = 10
         self.angle = 0
@@ -133,23 +133,54 @@ class Ranged_attack(pg.sprite.Sprite):
         return rotated_image, new_rect
        
 
-
-
-
 class Enemy(pg.sprite.Sprite):
-    def __init__(self):
-        pg.sprite.Sprite.__init__(self)
+    def __init__(self, game):
+        self.groups = game.all_sprites
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
         self.image = enemy_image
         self.rect = self.image.get_rect()
-        self.pos = vec(1000, randint(0, 600)) # start posisjon
+        self.pos = vec(randint(500,600), randint(0, 600)) # start posisjon
         self.rect.center = self.pos
-        self.speed_x = 2
+        self.speed_x = 4
         self.life = 50
+        self.knockbacked = False
+        self.knock_time = 0
+        self.direction = 0
     
     def update(self):
+
+        if self.pos.x < -100:
+            self.kill()
+        
+        now = pg.time.get_ticks()
+
+        if self.knockbacked:
+            if self.knock_time + 1000 < now:
+                print("knockback over")
+                self.knockbacked = False
+                self.speed_x = 4
+        
+            print("knockbacked")
+            print(self.direction)
+            self.pos += self.direction
+        
+        
         self.pos.x += -self.speed_x
+
         self.rect.center = self.pos
 
+    def knockback(self, player_pos, hit_pos):
+        if not self.knockbacked:
+            self.knockbacked = True
+            self.player_hit_pos = player_pos
+            self.knock_time = self.game.now
+            self.speed_x = 0
+            knock_pos = vec(hit_pos)
+            knock_vec = knock_pos - self.player_hit_pos
+            self.direction = knock_vec.normalize() * 3
+
+        
 
 class Block(pg.sprite.Sprite):
     def __init__(self):

@@ -37,7 +37,7 @@ class Game():
         self.projectiles_grp = pg.sprite.Group()
         self.blocks_grp = pg.sprite.Group()
 
-        self.my_player = Player(self) 
+        self.player = Player(self) 
    
         self.i = 0
         self.run()
@@ -49,7 +49,6 @@ class Game():
             self.events()
             self.update()
             self.draw()
-
         self.new()
 
     def events(self):
@@ -63,16 +62,29 @@ class Game():
                     self.playing = False
                             
     def update(self):
+        self.now = pg.time.get_ticks()
         self.all_sprites.update()
         
-        #self.hits = pg.sprite.spritecollide(self.my_player, self.enemies, True)
+        hits = pg.sprite.spritecollide(self.player, self.enemies, False)
+        if hits:
+            # knockback when collided          
+            for enemy in hits:
+                enemy.knockback(self.player.pos, enemy.pos)
+
+        '''
+        if hits:
+            # knockback when collided
+            knock_pos = vec(hits[0].pos)
+            knock_vec = knock_pos - self.player.pos 
+            self.player.pos -= knock_vec.normalize() * 100
+        '''
         self.hits2 = pg.sprite.groupcollide(self.projectiles_grp, self.enemies, True, True)
 
         # spawn enemies max 10
         while len(self.enemies) < 10:
-            self.freak = Enemy()
-            self.all_sprites.add(self.freak)
-            self.enemies.add(self.freak)
+            self.enemy = Enemy(self)
+            self.all_sprites.add(self.enemy)
+            self.enemies.add(self.enemy)
 
 
     def draw(self):
@@ -86,12 +98,12 @@ class Game():
         self.i-=1
 
         self.all_sprites.draw(self.screen)
-        self.my_player.draw_energy(self.screen)
+        self.player.draw_energy(self.screen)
 
         # rendrer/generer teksten som vi kan tegne til game screen
         # dette viser ikke teksten enda, men har bare laget den klar
-        self.text_player_hp = self.comic_sans30.render("HP: " + str(self.my_player.hp), False, (RED))
-        self.player_energy = self.comic_sans30.render("Energy: " + str(self.my_player.energy), False, (RED))
+        self.text_player_hp = self.comic_sans30.render("HP: " + str(self.player.hp), False, (RED))
+        self.player_energy = self.comic_sans30.render("Energy: " + str(self.player.energy), False, (RED))
         
         # tegn teksten til skjermen på en satt posisjon
         self.screen.blit(self.text_player_hp, (10, 10))
