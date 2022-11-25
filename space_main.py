@@ -37,6 +37,8 @@ class Game():
         self.projectiles_grp = pg.sprite.Group()
         self.blocks_grp = pg.sprite.Group()
 
+        self.block = Block(self,300,100)
+        
         self.player = Player(self) 
    
         self.i = 0
@@ -72,6 +74,13 @@ class Game():
             for enemy in hits:
                 enemy.knockback(self.player.pos, enemy.pos)
 
+        
+                
+        collision = pg.sprite.spritecollide(self.player, self.blocks_grp, False)
+        if collision:
+            self.check_collision(collision[0])
+            
+
         '''
         if hits:
             # knockback when collided
@@ -87,6 +96,31 @@ class Game():
             self.all_sprites.add(self.enemy)
             self.enemies.add(self.enemy)
 
+    def check_collision(self, collided_block):
+        offset = self.player.speed + 1
+        top = collided_block.rect.bottom - self.player.rect.top
+        bottom = collided_block.rect.top - self.player.rect.bottom
+
+        if top < offset and top > -offset:
+            self.player.rect.top = collided_block.rect.bottom + 1
+            print("collision top")
+        elif bottom > -offset and bottom < offset:
+            self.player.rect.bottom = collided_block.rect.top -1
+            print("collision bottom")
+        
+        left = collided_block.rect.right - self.player.rect.left
+        right = collided_block.rect.left - self.player.rect.right
+
+        if left < offset and left > -offset:
+            self.player.rect.left = collided_block.rect.right + 1
+            print("collision left")
+        elif right > -offset and right < offset:
+            self.player.rect.right = collided_block.rect.left - 1
+            print("collision right")
+
+        self.player.pos.x = self.player.rect.centerx
+        self.player.pos.y = self.player.rect.centery
+    
 
     def draw(self):
         # tegner ting til skjerm på valgt posisjon, og størrelse

@@ -42,6 +42,10 @@ class Player(pg.sprite.Sprite):
             self.pos.y -= self.speed
         if keys[pg.K_s]:
             self.pos.y += self.speed        
+        if keys[pg.K_a]:
+            self.pos.x -= self.speed        
+        if keys[pg.K_d]:
+            self.pos.x += self.speed        
 
         mouse = pg.mouse.get_pressed()
         
@@ -182,12 +186,13 @@ class Enemy(pg.sprite.Sprite):
 
         
 class Block(pg.sprite.Sprite):
-    def __init__(self):
-        pg.sprite.Sprite.__init__(self)
+    def __init__(self, game,x,y):
+        self.groups = game.all_sprites, game.blocks_grp
+        pg.sprite.Sprite.__init__(self, self.groups)
         self.image = pg.Surface([50,50])
         self.image.fill((255,0,0))
         self.rect = self.image.get_rect()
-        self.pos = vec(300, 300) # start posisjon
+        self.pos = vec(x, y) # start posisjon
         self.rect.center = self.pos
     
     
